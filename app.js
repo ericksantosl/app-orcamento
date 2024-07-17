@@ -58,6 +58,8 @@ class Bd {
             if (despesa === null) {
                 continue
             }
+
+            despesa.id = i
             despesas.push(despesa)
         }
 
@@ -105,6 +107,10 @@ class Bd {
 
         return despesasFiltradas
 
+    }
+
+    remover(id) {
+        localStorage.removeItem(id)
     }
 }
 
@@ -187,13 +193,31 @@ function carregarListaDespesas(despesas = [], filtro = false) {
         linha.insertCell(1).innerHTML = element.tipo
         linha.insertCell(2).innerHTML = element.descricao
         linha.insertCell(3).innerHTML = element.valor
+
+        //criar o botão de exclusão
+        let btn = document.createElement('button')
+
+        btn.className = 'btn btn-danger'
+        btn.innerHTML = '<i class="fas fa-times"></i>'
+        btn.id = `id_despesa_${element.id}`
+        btn.onclick = function() {
+            //remover a despesa
+            let id = this.id.replace('id_despesa_' ,'')
+
+            bd.remover(id)
+
+            window.location.reload()
+        }
+
+        linha.insertCell(4).append(btn)
+
     });
 }
 
 function pesquisarDespesa() {
     let ano = document.getElementById('ano').value
     let mes = document.getElementById('mes').value
-    let dia = document.getElementById('dia').value 
+    let dia = document.getElementById('dia').value
     let tipo = document.getElementById('tipo').value
     let descricao = document.getElementById('descricao').value
     let valor = document.getElementById('valor').value
