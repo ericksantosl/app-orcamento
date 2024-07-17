@@ -71,7 +71,7 @@ class Bd {
         despesasFiltradas = this.recuperarTodosRegistros()
 
         
-        console.log(despesa)
+        //console.log(despesa)
 
         //ano
         if (despesa.ano != '') {
@@ -147,12 +147,14 @@ function cadastrarDespesa() {
     }
 }
 
-function carregarListaDespesas() {
-    let despesas = []
+function carregarListaDespesas(despesas = [], filtro = false) {
 
-    despesas = bd.recuperarTodosRegistros()
+    if (despesas.length == 0 && filtro == false) {
+        despesas = bd.recuperarTodosRegistros()
+    }
 
     let listaDespesas = document.getElementById('listaDespesas')
+    listaDespesas.innerHTML = ''
 
     //percorrer o array despesas, listando cada despesa
     despesas.forEach(element => {
@@ -198,38 +200,7 @@ function pesquisarDespesa() {
 
     let despesa = new Despesa(ano, mes, dia, tipo, descricao, valor)
 
-    bd.pesquisar(despesa)
+    let despesas = bd.pesquisar(despesa)
 
-    //percorrer o array despesas, listando cada despesa
-    despesas.forEach(element => {
-        
-        //criando a linhha (tr)
-        let linha = listaDespesas.insertRow()
-
-        //criar as colunas (td)
-        linha.insertCell(0).innerHTML = `${element.dia}/${element.mes}/${element.ano}`
-
-        //ajustando tipo
-        switch (element.tipo) {
-            case '1': 
-                element.tipo = 'Alimentação'
-                break;
-            case '2': 
-                element.tipo = 'Educação'
-                break;
-            case '3': 
-                element.tipo = 'Lazer'
-                break;
-            case '4': 
-                element.tipo = 'Saúde'
-                break;
-            case '5': 
-                element.tipo = 'Transporte'
-                break;
-        }
-
-        linha.insertCell(1).innerHTML = element.tipo
-        linha.insertCell(2).innerHTML = element.descricao
-        linha.insertCell(3).innerHTML = element.valor
-    });
+    carregarListaDespesas(despesas, true)
 }
