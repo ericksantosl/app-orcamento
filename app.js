@@ -65,7 +65,46 @@ class Bd {
     }
 
     pesquisar(despesa) {
+
+        let despesasFiltradas = []
+
+        despesasFiltradas = this.recuperarTodosRegistros()
+
+        
         console.log(despesa)
+
+        //ano
+        if (despesa.ano != '') {
+            despesasFiltradas = despesasFiltradas.filter(d => d.ano == despesa.ano)
+        }
+        
+        //mes
+        if (despesa.mes != '') {
+            despesasFiltradas = despesasFiltradas.filter(d => d.mes == despesa.mes)
+        }
+
+        //dia
+        if (despesa.dia != '') {
+            despesasFiltradas = despesasFiltradas.filter(d => d.dia == despesa.dia)
+        }
+
+        //tipo
+        if (despesa.tipo != '') {
+            despesasFiltradas = despesasFiltradas.filter(d => d.tipo == despesa.tipo)
+        }
+
+        //descricao
+        if (despesa.descricao != '') {
+            despesasFiltradas = despesasFiltradas.filter(d => d.descricao == despesa.descricao)
+        }
+
+        //valor
+        if (despesa.valor != '') {
+            despesasFiltradas = despesasFiltradas.filter(d => d.valor == despesa.valor)
+        }
+
+        return despesasFiltradas
+
     }
 }
 
@@ -160,4 +199,37 @@ function pesquisarDespesa() {
     let despesa = new Despesa(ano, mes, dia, tipo, descricao, valor)
 
     bd.pesquisar(despesa)
+
+    //percorrer o array despesas, listando cada despesa
+    despesas.forEach(element => {
+        
+        //criando a linhha (tr)
+        let linha = listaDespesas.insertRow()
+
+        //criar as colunas (td)
+        linha.insertCell(0).innerHTML = `${element.dia}/${element.mes}/${element.ano}`
+
+        //ajustando tipo
+        switch (element.tipo) {
+            case '1': 
+                element.tipo = 'Alimentação'
+                break;
+            case '2': 
+                element.tipo = 'Educação'
+                break;
+            case '3': 
+                element.tipo = 'Lazer'
+                break;
+            case '4': 
+                element.tipo = 'Saúde'
+                break;
+            case '5': 
+                element.tipo = 'Transporte'
+                break;
+        }
+
+        linha.insertCell(1).innerHTML = element.tipo
+        linha.insertCell(2).innerHTML = element.descricao
+        linha.insertCell(3).innerHTML = element.valor
+    });
 }
